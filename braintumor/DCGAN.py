@@ -66,8 +66,6 @@ def load_single_image(path):
                 return img
 
 
-# Create a dataset with 1 channel
-# This is required for the DCGAN
 # The dataset is a tuple of (flair, ot)
 # The ot channel is the ground truth
 def create_1_chan_data(flair, ot):
