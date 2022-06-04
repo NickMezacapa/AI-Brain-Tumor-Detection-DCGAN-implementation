@@ -1,9 +1,3 @@
-
-# coding: utf-8
-
-# In[1]:
-
-
 import tensorflow as tf
 from matplotlib import pyplot
 from glob import glob
@@ -139,14 +133,10 @@ def load_dataset(path):
     assert (train_ot.shape == train_flair.shape)
     return train_flair, train_ot
 
-
-# In[2]:
-
 # SimpleITK is used for reading the brain scan images
 '''
 This funciton reads a '.mhd' file using SimpleITK and return the image array, origin and spacing of the image.
 '''
-
 
 def load_itk(filename):
     # Reads the image using SimpleITK
@@ -165,61 +155,28 @@ def load_itk(filename):
     return ct_scan
 
 
-# In[3]:
-
-
 flair_data, ot_data = load_dataset(PATH)
 
-
-# In[4]:
-
-
 print(flair_data.shape)
-
-
-# In[5]:
-
 
 # fig1 = plt.figure()
 plt.imshow(ot_data[420, :, :])
 plt.savefig('sample.png')
 plt.show()
 
-
-# In[6]:
-
-
 print(np.unique(ot_data[420, :, :]))
-
-
-# In[7]:
-
 
 # imginput = x[0]
 # imgoutput = x[1]
 
-
-# In[8]:
-
-
 print(flair_data.shape)
 
-
-# In[9]:
-
-
 print(ot_data.shape)
-
-
-# In[10]:
-
 
 np.amax(ot_data)
 
 
 # # Experiment
-
-# In[11]:
 
 
 # Image configuration
@@ -229,10 +186,6 @@ data_files = PATH
 # shape = len(data_files), IMAGE_WIDTH, IMAGE_HEIGHT,1
 shape = flair_data.shape[0], flair_data.shape[1], flair_data.shape[2], 1
 print(shape)
-
-
-# In[12]:
-
 
 def get_batches(batch_size):
     """
@@ -261,14 +214,7 @@ def get_batches(batch_size):
         # print("db:",data_batch.shape)
         yield data_batch, z_batch
 
-
-# In[13]:
-
-
 print(get_batches(4))
-
-
-# In[14]:
 
 
 def model_inputs(image_width, image_height, image_channels, z_dim):
@@ -281,9 +227,6 @@ def model_inputs(image_width, image_height, image_channels, z_dim):
     learning_rate = tf.placeholder(tf.float32, name='learning_rate')
 
     return inputs_real, inputs_z, learning_rate
-
-
-# In[15]:
 
 
 def discriminator(images, reuse=False):
@@ -323,9 +266,6 @@ def discriminator(images, reuse=False):
         out = tf.sigmoid(logits)
 
         return out, logits
-
-
-# In[16]:
 
 
 def generator(z, out_channel_dim, is_train=True):
@@ -373,9 +313,6 @@ def generator(z, out_channel_dim, is_train=True):
         return out
 
 
-# In[17]:
-
-
 def model_loss(input_real, input_z, out_channel_dim):
     """
     Get the loss for the discriminator and generator
@@ -406,9 +343,6 @@ def model_loss(input_real, input_z, out_channel_dim):
     return d_loss, g_loss
 
 
-# In[18]:
-
-
 def model_opt(d_loss, g_loss, learning_rate, beta1):
     """
     Get optimization operations
@@ -425,9 +359,6 @@ def model_opt(d_loss, g_loss, learning_rate, beta1):
             learning_rate, beta1=beta1).minimize(g_loss, var_list=g_vars)
 
     return d_train_opt, g_train_opt
-
-
-# In[19]:
 
 
 def show_generator_output(sess, n_images, input_z, out_channel_dim, counter):
@@ -447,9 +378,6 @@ def show_generator_output(sess, n_images, input_z, out_channel_dim, counter):
     path = "out"+str(counter)+".png"
     pyplot.savefig(path)
     pyplot.show()
-
-
-# In[20]:
 
 
 def train(epoch_count, batch_size, z_dim, learning_rate, beta1, get_batches, data_shape):
@@ -495,9 +423,6 @@ def train(epoch_count, batch_size, z_dim, learning_rate, beta1, get_batches, dat
 
                     _ = show_generator_output(
                         sess, 1, input_z, data_shape[3], (steps/40))
-
-
-# In[21]:
 
 
 #### import tensorflow as tf
